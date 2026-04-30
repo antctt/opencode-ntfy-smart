@@ -30,12 +30,7 @@ Update my OpenCode config to use `opencode-ntfy-smart` as a plugin. If `opencode
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
-  "plugin": [
-    "@vectorize-io/opencode-hindsight",
-    "opencode-ntfy-smart",
-    "superpowers@git+https://github.com/obra/superpowers.git",
-    "@tarquinen/opencode-dcp@latest"
-  ]
+  "plugin": ["opencode-ntfy-smart"]
 }
 ```
 
