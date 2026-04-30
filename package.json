@@ -1,0 +1,54 @@
+{
+  "name": "opencode-ntfy-smart",
+  "version": "0.1.0",
+  "description": "OpenCode plugin that sends ntfy.sh notifications with smart main/subagent filtering",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "notification-ntfy-smart.schema.json",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antctt/opencode-ntfy-smart.git"
+  },
+  "homepage": "https://github.com/antctt/opencode-ntfy-smart#readme",
+  "bugs": "https://github.com/antctt/opencode-ntfy-smart/issues",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "ntfy",
+    "ntfy.sh",
+    "notifications",
+    "iphone",
+    "push"
+  ],
+  "author": "antctt",
+  "license": "MIT",
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "dependencies": {
+    "iso8601-duration": "^2.1.3"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.2.6",
+    "@types/node": "^25.2.3",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.18"
+  }
+}

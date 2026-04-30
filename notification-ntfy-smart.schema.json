@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/antctt/opencode-ntfy-smart/main/notification-ntfy-smart.schema.json",
+  "title": "opencode-ntfy-smart Configuration",
+  "description": "Configuration for ~/.config/opencode/notification-ntfy-smart.json",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "events": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "session.idle": { "$ref": "#/$defs/eventToggle" },
+        "session.error": { "$ref": "#/$defs/eventToggle" },
+        "permission.asked": { "$ref": "#/$defs/eventToggle" },
+        "question.asked": { "$ref": "#/$defs/eventToggle" }
+      }
+    },
+    "backend": {
+      "type": "object",
+      "required": ["topic"],
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "server": {
+          "type": "string",
+          "default": "https://ntfy.sh"
+        },
+        "token": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["min", "low", "default", "high", "max"],
+          "default": "default"
+        },
+        "icon": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": ["light", "dark"],
+              "default": "dark"
+            },
+            "variant": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "light": { "type": "string" },
+                "dark": { "type": "string" }
+              }
+            }
+          }
+        },
+        "fetchTimeout": {
+          "type": "string",
+          "pattern": "^P(?=.+)(?=.*\\d)(?:\\d+Y)?(?:\\d+M)?(?:\\d+W)?(?:\\d+D)?(?:T(?=.+)(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+        },
+        "title": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "session.idle": { "$ref": "#/$defs/contentTemplate" },
+            "session.error": { "$ref": "#/$defs/contentTemplate" },
+            "permission.asked": { "$ref": "#/$defs/contentTemplate" },
+            "question.asked": { "$ref": "#/$defs/contentTemplate" }
+          }
+        },
+        "message": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "session.idle": { "$ref": "#/$defs/contentTemplate" },
+            "session.error": { "$ref": "#/$defs/contentTemplate" },
+            "permission.asked": { "$ref": "#/$defs/contentTemplate" },
+            "question.asked": { "$ref": "#/$defs/contentTemplate" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "eventToggle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "contentTemplate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": "string" },
+        "command": { "type": "string" }
+      },
+      "oneOf": [
+        {
+          "required": ["value"],
+          "properties": {
+            "value": { "type": "string" }
+          }
+        },
+        {
+          "required": ["command"],
+          "properties": {
+            "command": { "type": "string" }
+          }
+        }
+      ]
+    }
+  }
+}
