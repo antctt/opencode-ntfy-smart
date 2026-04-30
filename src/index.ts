@@ -212,6 +212,59 @@ export function createSmartNtfyHooks({
 }): Hooks {
   const lifecycleCache = new Map<string, SessionKind>();
 
+  const notifyPermissionAsked = async ({
+    sessionID,
+    permissionType,
+    patterns,
+  }: {
+    sessionID?: string;
+    permissionType?: string;
+    patterns?: string[];
+  }) => {
+    const notifyEvent: NotifyEvent = "permission.asked";
+
+    if (!config.enabled || !config.events[notifyEvent].enabled) {
+      return;
+    }
+
+    const sessionKind = await classifySession(client, lifecycleCache, sessionID);
+    if (!NOTIFY_POLICY[notifyEvent][sessionKind]) {
+      return;
+    }
+
+    try {
+      const variables: TemplateVariables = {
+        project: projectName,
+        session_id: sessionID ?? "",
+        error: "",
+        permission_type: permissionType ?? "",
+        permission_patterns: patterns?.join(",") ?? "",
+        question: "",
+      };
+      const title = await resolveTemplate(
+        config.backend.title[notifyEvent],
+        DEFAULT_TITLES[notifyEvent],
+        variables,
+        $,
+      );
+      const message = await resolveTemplate(
+        config.backend.message[notifyEvent],
+        DEFAULT_MESSAGES[notifyEvent],
+        variables,
+        $,
+      );
+
+      await send({
+        event: notifyEvent,
+        title,
+        message,
+        iconUrl: config.backend.iconUrl,
+      });
+    } catch {
+      return;
+    }
+  };
+
   return {
     event: async ({ event }) => {
       const sessionID = getSessionID(event);
@@ -268,6 +321,23 @@ export function createSmartNtfyHooks({
       } catch {
         return;
       }
+    },
+    "permission.ask": async (input, output) => {
+      if (output.status !== "ask") {
+        return;
+      }
+
+      const patterns = input.pattern === undefined
+        ? undefined
+        : Array.isArray(input.pattern)
+          ? input.pattern
+          : [input.pattern];
+
+      await notifyPermissionAsked({
+        sessionID: input.sessionID,
+        permissionType: input.type,
+        ...(patterns === undefined ? {} : { patterns }),
+      });
     },
   };
 }

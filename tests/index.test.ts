@@ -237,6 +237,34 @@ describe("createSmartNtfyHooks", () => {
     expect(harness.get).not.toHaveBeenCalled();
   });
 
+  it("sends permission notification from permission.ask hook", async () => {
+    const harness = createHarness();
+
+    if (!harness.hooks["permission.ask"]) {
+      throw new Error("Expected permission.ask hook to be defined");
+    }
+
+    await harness.hooks["permission.ask"]!(
+      {
+        id: "perm-hook-1",
+        sessionID: "session-main",
+        type: "bash",
+        pattern: ["src/**", "tests/**"],
+        metadata: {},
+        always: [],
+      },
+      { status: "ask" },
+    );
+
+    expect(harness.send).toHaveBeenCalledTimes(1);
+    expect(harness.send).toHaveBeenCalledWith({
+      event: "permission.asked",
+      title: "demo: permission",
+      message: "bash:src/**,tests/**",
+      iconUrl: "https://example.com/icon.png",
+    });
+  });
+
   it("sends question.asked for main sessions using the first question prompt", async () => {
     const harness = createHarness();
     const request: QuestionRequest = {

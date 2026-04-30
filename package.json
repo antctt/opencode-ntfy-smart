@@ -1,6 +1,6 @@
 {
   "name": "opencode-ntfy-smart",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OpenCode plugin that sends ntfy.sh notifications with smart main/subagent filtering",
   "type": "module",
   "main": "./dist/index.js",
