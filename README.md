@@ -13,9 +13,33 @@ It keeps the four supported notification events while reducing subagent noise:
 
 ## Install
 
-```bash
-npm install opencode-ntfy-smart
+When you use OpenCode as a global app, you do not need to run `npm install` manually for the plugin. OpenCode can install npm plugins automatically from `~/.config/opencode/opencode.json` and cache them under `~/.cache/opencode/`.
+
+### Agentic
+
+Give your agent a prompt like this:
+
+```text
+Update my OpenCode config to use `opencode-ntfy-smart` as a plugin. If `opencode-ntfy.sh` is present, replace it. Keep my other plugins unchanged, and create or update `~/.config/opencode/notification-ntfy-smart.json` with my ntfy.sh topic/server settings.
 ```
+
+### Manual
+
+1. Edit `~/.config/opencode/opencode.json` and add `opencode-ntfy-smart` to the `plugin` array. If you are migrating from `opencode-ntfy.sh`, replace it.
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "@vectorize-io/opencode-hindsight",
+    "opencode-ntfy-smart",
+    "superpowers@git+https://github.com/obra/superpowers.git",
+    "@tarquinen/opencode-dcp@latest"
+  ]
+}
+```
+
+2. Create `~/.config/opencode/notification-ntfy-smart.json` using the configuration example below.
 
 ## Local Development
 
